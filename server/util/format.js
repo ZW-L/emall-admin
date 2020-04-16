@@ -1,0 +1,3 @@
+exports.getUserProfile = function (user) {
+
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>注册</h1>
+  <form action="http://localhost:8081/signup" method="POST">
+    <p>
+      Name:
+      <input type="text" name="username">
+    </p>
+    <p>
+      Password:
+      <input type="text" name="password">
+    </p>
+    <p>
+      Email:
+      <input type="text" name="email">
+    </p>
+    <button type="submit">Register</button>
+  </form>
+
+  <h1>登录</h1>
+  <form action="http://localhost:8081/login" method="POST">
+    <p>
+      Name:
+      <input type="text" name="username">
+    </p>
+    <p>
+      Password:
+      <input type="text" name="password">
+    </p>
+    <button type="submit">Login</button>
+  </form>
+
+  <h1>添加商品</h1>
+  <form action="http://localhost:8081/product/add" method="POST">
+    <p>
+      Name: 
+      <input type="text" name="name">
+    </p>
+    <p>
+      desc:
+      <input type="text" name="desc">
+    </p>
+    <p>
+      instock:
+      <input type="text" name="instock">
+    </p>
+    <p>
+      Price:
+      <input type="text" name="price">
+    </p>
+    <button type="submit">Add</button>
+  </form>
+</body>
+</html>
