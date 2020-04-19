@@ -35,7 +35,7 @@
 <script>
 import axios from 'axios'
 import { resetIndex } from '@/util/array.js'
-import FilterCard from '@/components/FilterCard/'
+import FilterCard from './FilterCard'
 
 export default {
   name: 'UsersView',

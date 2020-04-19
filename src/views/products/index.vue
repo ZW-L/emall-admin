@@ -1,20 +1,8 @@
 <template>
   <div class="table-wrapper">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item label="审批人">
-        <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-      </el-form-item>
-      <el-form-item label="活动区域">
-        <el-select v-model="formInline.region" placeholder="活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
-      </el-form-item>
-    </el-form>
     <el-alert type="info" effect="dark">提示：点击详情按钮可修改商品详细信息。</el-alert>
+    <filter-card @search="handleSearch"></filter-card>
+
     <el-table :data="products" stripe>
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column label="商品名" prop="name"></el-table-column>
@@ -38,6 +26,7 @@
 
 <script>
 import axios from 'axios'
+import FilterCard from './FIlterCard'
 
 export default {
   data () {
@@ -49,19 +38,22 @@ export default {
       }
     }
   },
-
+  components: {
+    FilterCard
+  },
   computed: {
 
   },
-
   mounted () {
     axios.get('/api/products')
       .then(res => {
         this.products = res.data.list
       })
   },
-
   methods: {
+    handleSearch (list) {
+
+    },
     handleEdit (index, row) {
       console.log(index, row)
     },
