@@ -1,3 +1,3 @@
-export const camelString = str => {
-  return str.replace(/\w/, m => m.toUpperCase())
+export const camelPath = str => {
+  return str.replace(/\/(\w)/g, (m, $1) => $1.toUpperCase())
 }

@@ -1,12 +1,12 @@
 <template>
   <div>
-
+    users add
   </div>
 </template>
 
 <script>
 export default {
-  name: 'tags'
+
 }
 </script>
 

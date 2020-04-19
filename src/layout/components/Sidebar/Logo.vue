@@ -1,21 +1,30 @@
 <template>
   <h1>
-    <a class="logo">
+    <router-link to="/" class="logo">
       <span class="img-wrapper">
         <img :src="logo" alt="logo" class="logo-img">
       </span>
-      <span class="logo-title">{{title}}</span>
-    </a>
+      <span v-show="!sidebarCollapse" class="logo-title">{{title}}</span>
+    </router-link>
   </h1>
 </template>
 
 <script>
 export default {
-  name: 'SidebarLogo',
-  data () {
-    return {
-      title: 'emall admin',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+  name: 'Logo',
+  props: {
+    title: {
+      type: String,
+      default: 'Admin'
+    },
+    logo: {
+      type: String,
+      default: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+    }
+  },
+  computed: {
+    sidebarCollapse () {
+      return this.$store.state.settings.sidebarCollapse
     }
   }
 }
@@ -30,9 +39,13 @@ export default {
   background-color: #074349;
   color: #fff;
   &-img {
+    margin-right: 10px;
     width: 30px;
+    vertical-align: middle;
   }
   &-title {
+    max-width: 150px;
+    text-overflow: hidden;
     font-size: 16px;
   }
 }

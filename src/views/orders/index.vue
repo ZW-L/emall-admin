@@ -2,11 +2,11 @@
   <div class="table-wrapper">
     <el-alert type="info" effect="dark">提示：点击详情按钮可修改订单详细信息。</el-alert>
     <el-card shadow="always">
-      <el-table :data="products" stripe highlight-current-row>
+      <el-table :data="orders" stripe highlight-current-row>
         <el-table-column type="index"></el-table-column>
         <el-table-column label="日期" prop="date"></el-table-column>
         <el-table-column label="订单编号" prop="productId"></el-table-column>
-        <el-table-column label="状态" prop="statu"></el-table-column>
+        <el-table-column label="状态" prop="status"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -23,29 +23,24 @@
 </template>
 
 <script>
-import Mock from 'mockjs'
+import axios from 'axios'
 
 export default {
   data () {
     return {
-
+      orders: []
     }
   },
 
   computed: {
-    products () {
-      return Mock.mock({
-        'list|10-50': [{
-          date: '@date',
-          productId: '@id',
-          'statu|1': ['待支付', '进行中', '已完成']
-        }]
-      }).list
-    }
+
   },
 
   mounted () {
-    console.log(this.users)
+    axios.get('/api/orders')
+      .then(res => {
+        this.orders = res.data.list
+      })
   },
 
   methods: {
@@ -54,6 +49,22 @@ export default {
     },
     handleDelete (index, row) {
       console.log(index, row)
+      this.$confirm('此操作将删除该订单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.orders.splice(index, 1)
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }

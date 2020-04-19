@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>path: {{this.$route.path}}</h1>
+    admin
   </div>
 </template>
 

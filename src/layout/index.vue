@@ -1,46 +1,35 @@
 <template>
   <div class="layout">
-    <sidebar class="sidebar-container"/>
+    <sidebar :class="['sidebar-container', { 'is-collapse': sidebarCollapse }]" />
     <div class="main-container">
-      <navbar class="main-navbar"/>
-      <app-main class="main-app"/>
+      <navbar class="main-navbar" />
+      <app-main class="main-app" />
     </div>
+    <el-backtop target=".main-container">
+    </el-backtop>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Sidebar, AppMain, Navbar } from './components'
+
 export default {
   name: 'Layout',
   components: {
     Sidebar,
     AppMain,
     Navbar
+  },
+  data () {
+    return {
+
+    }
+  },
+  computed: {
+    ...mapState({
+      sidebarCollapse: state => state.settings.sidebarCollapse
+    })
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.layout {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-  .sidebar-container {
-    width: 200px;
-    color: #fff;
-    background-color: rgb(22, 46, 35);
-  }
-  .main-container {
-    flex: 1;
-    .main-navbar {
-      height: 50px;
-      background-color: #ccc;
-    }
-    .main-app {
-      height: calc(100vh - 50px);
-      overflow: scroll;
-    }
-  }
-}
-
-</style>
