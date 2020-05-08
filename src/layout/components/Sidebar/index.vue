@@ -60,7 +60,7 @@
 
       <el-menu-item index="6">
         <i class="el-icon-s-custom"></i>
-        <span slot="title">管理员</span>
+        <span slot="title">管理权限</span>
       </el-menu-item>
 
       <el-menu-item index="7">
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import Logo from './Logo'
+import Logo from './logo'
 
 export default {
   name: 'sidebar',

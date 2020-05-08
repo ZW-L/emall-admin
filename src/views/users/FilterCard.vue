@@ -102,7 +102,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter-card {
-  margin: 10px 0;
-}
+
 </style>

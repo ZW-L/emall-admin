@@ -124,12 +124,12 @@ const constantRoutes = [
     ]
   },
   {
-    path: '/admin',
+    path: '/role',
     component: Layout,
     children: [
       {
         path: '',
-        component: () => import('@/views/admin/index')
+        component: () => import('@/views/role/index')
       }
     ]
   },

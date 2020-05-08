@@ -1,16 +1,17 @@
 <template>
   <div class="table-wrapper">
-    <el-alert type="info" effect="dark">提示：点击详情按钮可浏览用户详细信息。</el-alert>
+    <el-alert v-if="showTips" type="info" effect="dark">提示：点击详情按钮可浏览用户详细信息。</el-alert>
     <filter-card @search="handleSearch" />
 
     <el-table :data="currentUsers" stripe highlight-current-row>
-      <el-table-column label="编号" prop="index" width="50px" align="center"></el-table-column>
-      <el-table-column label="用户名" prop="name" min-width="40px"></el-table-column>
-      <el-table-column label="邮箱" prop="email"></el-table-column>
-      <el-table-column label="注册时间" prop="register_date" min-width="50px"></el-table-column>
-      <el-table-column label="会员等级" prop="vip" min-width="50px"></el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
+      <el-table-column label="序号" prop="index" align="center" width="50px" />
+      <el-table-column label="用户名" prop="name" align="center" width="100px" />
+      <el-table-column label="邮箱" prop="email" align="center" width="200px" />
+      <el-table-column label="注册时间" prop="register_date" align="center" width="200px"/>
+      <el-table-column label="最后登录" prop="last_login_date" align="center" width="200px" />
+      <el-table-column label="会员等级" prop="vip" align="center" width="100px" />
+      <el-table-column label="操作" align="center" width="200px">
+        <template v-slot="scope">
           <el-button size="mini" type="primary"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button size="mini" type="danger"
@@ -29,12 +30,36 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="filterUsers.length">
     </el-pagination>
+
+    <el-dialog title="编辑用户信息" :visible.sync="userFormVisible" width="500px">
+      <el-form :model="userForm" label-width="80px">
+        <el-form-item label="昵称">
+          <el-input v-model="userForm.name" autocomplete="off" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="userForm.email" autocomplete="off" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="userForm.tel" autocomplete="off" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="会员等级">
+          <el-radio v-model="userForm.vip" label="大众会员">大众会员</el-radio>
+          <el-radio v-model="userForm.vip" label="高级会员">高级会员</el-radio>
+          <el-radio v-model="userForm.vip" label="超级会员">超级会员</el-radio>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handleEditUserCancel">取 消</el-button>
+        <el-button type="primary" @click="handleEditUserSuccess">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from 'axios'
-import { resetIndex } from '@/util/array.js'
+import { resetIndex } from '@/utils/array.js'
 import FilterCard from './FilterCard'
 
 export default {
@@ -47,10 +72,20 @@ export default {
       users: [], // 原始数据
       filterUsers: [], // 通过筛选后的数据
       currentPage: 1, // 当前显示的页码
-      pageSize: 50 // 每页显示的条目数
+      pageSize: 50, // 每页显示的条目数
+      userFormVisible: false,
+      userForm: {
+        name: '',
+        email: '',
+        tel: '',
+        vip: ''
+      }
     }
   },
   computed: {
+    ...mapState({
+      showTips: state => state.settings.showTips
+    }),
     currentUsers () { // 当前页码展示的条目
       return resetIndex(this.filterUsers.slice(this.baseIndex, this.baseIndex + this.pageSize), this.baseIndex)
     },
@@ -64,9 +99,12 @@ export default {
         this.users = resetIndex(res.data.list, 0)
         this.filterUsers = this.users
       })
+    console.log(this.showTips)
   },
   methods: {
     handleEdit (index, row) {
+      this.userFormVisible = true
+      this.userForm = Object.assign({}, row)
       console.log(index, row)
     },
     handleDelete (index, row) {
@@ -88,11 +126,29 @@ export default {
         const vipString = list.vip === 'normal' ? '大众会员' : (list.vip === 'high' ? '高级会员' : '超级会员')
         this.filterUsers = resetIndex(this.users.filter(v => v.vip === vipString), this.baseIndex)
       }
+    },
+    handleEditUserCancel () {
+      this.$confirm('可能有尚未提交的修改，是否退出？', '提示', {
+        confirmButtonText: '退出',
+        cancelButtonText: '我再看看',
+        type: 'warning'
+      }).then(() => {
+        this.userFormVisible = false
+      })
+    },
+    handleEditUserSuccess () {
+      this.$confirm('此操作为敏感操作，请再次确定提交信息！', '提示', {
+        confirmButtonText: '直接提交',
+        cancelButtonText: '我再看看',
+        type: 'warning'
+      }).then(() => {
+        this.userFormVisible = false
+        this.$message({
+          type: 'success',
+          message: '修改成功!'
+        })
+      })
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -1,20 +1,29 @@
 <template>
   <div class="table-wrapper">
-    <el-alert type="info" effect="dark">提示：点击详情按钮可修改商品详细信息。</el-alert>
+    <el-alert type="info" effect="dark">提示：点击编辑按钮可修改商品详细信息。</el-alert>
     <filter-card @search="handleSearch"></filter-card>
 
-    <el-table :data="products" stripe>
-      <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column label="商品名" prop="name"></el-table-column>
-      <el-table-column label="上架时间" prop="date" sortable></el-table-column>
-      <el-table-column label="商品 ID" prop="productId"></el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
+    <el-table :data="products" stripe highlight-current-row>
+      <el-table-column label="序号" prop="index" width="60px" align="center" />
+      <el-table-column label="商品名" prop="name" width="100px" />
+      <el-table-column label="上架时间" prop="date" sortable width="200px" align="center" />
+      <el-table-column label="商品 ID" prop="productId" width="110px" />
+      <el-table-column label="品类" prop="category" width="100px" align="center" />
+      <el-table-column label="标签" prop="tags" width="150px" align="center" />
+      <el-table-column label="上架" prop="onsale" width="100px" align="center">
+        <template v-slot="scope">
+          <el-switch
+            v-model="scope.row.onsale"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center">
+        <template v-slot="scope">
           <el-button
             size="mini" type="primary"
-            @click="handleEdit(scope.$index, scope.row)">详情</el-button>
-          <el-button
-            size="mini" type="primary">下架</el-button>
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button
             size="mini" type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -31,11 +40,7 @@ import FilterCard from './FIlterCard'
 export default {
   data () {
     return {
-      products: [],
-      formInline: {
-        user: '',
-        region: ''
-      }
+      products: []
     }
   },
   components: {
@@ -48,6 +53,7 @@ export default {
     axios.get('/api/products')
       .then(res => {
         this.products = res.data.list
+        console.log(this.products)
       })
   },
   methods: {

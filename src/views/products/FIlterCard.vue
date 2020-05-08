@@ -8,8 +8,8 @@
     <el-form inline class="demo-form-inline">
       <el-form-item label="商品分类">
         <el-select
-          placeholder="选择会员等级"
-          v-model="list.vip"
+          placeholder="选择商品分类"
+          v-model="list.cate"
           clearable
           size="medium">
           <el-option label="手机" value="phone"></el-option>
@@ -32,7 +32,7 @@
       </el-form-item>
       <el-form-item>
         <el-input
-          placeholder="输入用户名或邮箱搜索"
+          placeholder="输入商品名/ID"
           size="medium"
           v-model="list.input"
           clearable>
@@ -87,7 +87,7 @@ export default {
       },
       list: {
         date: '',
-        vip: '',
+        cate: '',
         input: ''
       }
     }
@@ -102,7 +102,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter-card {
-  margin: 10px 0;
-}
+
 </style>
