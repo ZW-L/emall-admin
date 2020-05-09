@@ -1,25 +1,31 @@
 <template>
-  <el-form ref="form" :model="form" label-width="80px" class="user-add-form">
+  <el-form
+    v-loading.fullscreen="fullscreenLoading"
+    element-loading-text="正在操作"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+    :model="userForm"
+    label-width="80px"
+    class="user-add-form"
+  >
     <el-form-item label="用户名">
-      <el-input v-model="form.name"></el-input>
+      <el-input v-model="userForm.name"></el-input>
+    </el-form-item>
+    <el-form-item label="昵称">
+      <el-input v-model="userForm.nickname"></el-input>
     </el-form-item>
     <el-form-item label="邮箱">
-      <el-input v-model="form.email"></el-input>
+      <el-input v-model="userForm.email"></el-input>
     </el-form-item>
     <el-form-item label="手机号">
-      <el-input v-model="form.tel"></el-input>
-    </el-form-item>
-    <el-form-item label="生日">
-      <el-col :span="11">
-        <el-date-picker type="date" placeholder="选择日期" v-model="form.birthday" style="width: 100%;"></el-date-picker>
-      </el-col>
+      <el-input v-model="userForm.tel"></el-input>
     </el-form-item>
     <el-form-item label="性别">
-      <el-radio v-model="form.sex" label="male">男</el-radio>
-      <el-radio v-model="form.sex" label="female">女</el-radio>
+      <el-radio v-model="userForm.sex" label="male">男</el-radio>
+      <el-radio v-model="userForm.sex" label="female">女</el-radio>
     </el-form-item>
     <el-form-item label="简介">
-      <el-input type="textarea" v-model="form.desc"></el-input>
+      <el-input type="textarea" v-model="userForm.introduction"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">添加用户</el-button>
@@ -29,31 +35,47 @@
 </template>
 
 <script>
+import { addUser } from '@/api/user'
+
 export default {
   name: 'user-add',
   data () {
     return {
-      form: {
+      userForm: {
         name: '',
+        nickname: '',
         email: '',
         tel: '',
-        birthday: '',
         sex: '',
-        desc: ''
-      }
+        introduction: ''
+      },
+      fullscreenLoading: false
     }
   },
   methods: {
     onSubmit () {
-      console.log('submit')
-      // todo: 提交修改请求到服务器期间，展示一个 loading 动画，在收到服务器响应时关闭动画
+      this.fullscreenLoading = true
+      addUser(this.userForm).then(res => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '添加成功！'
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '添加失败！'
+          })
+        }
+        this.fullscreenLoading = false
+      })
     },
     onClear () {
-      this.form = {
+      this.userForm = {
         name: '',
+        nickname: '',
         email: '',
         tel: '',
-        birthday: '',
         sex: '',
         desc: ''
       }

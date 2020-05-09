@@ -7,5 +7,12 @@ function resolve (dir) {
 }
 
 module.exports = {
-
+  devServer: {
+    proxy: {
+      '/mock': {
+        target: 'http://localhost:8081',
+        pathRewrite: { '^/mock': '' }
+      }
+    }
+  }
 }

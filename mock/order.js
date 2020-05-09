@@ -1,4 +1,4 @@
-import Mock from 'mockjs'
+const Mock = require('mockjs')
 
 const orders = Mock.mock({
   'list|10-50': [{
@@ -8,4 +8,4 @@ const orders = Mock.mock({
   }]
 })
 
-export default orders
+module.exports = orders

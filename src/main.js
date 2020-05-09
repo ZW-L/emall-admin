@@ -7,8 +7,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './styles/index.scss'
 
-require('../mock') // Mock 服务
-
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false

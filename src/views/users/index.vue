@@ -3,14 +3,19 @@
     <el-alert v-if="showTips" type="info" effect="dark">提示：点击详情按钮可浏览用户详细信息。</el-alert>
     <filter-card @search="handleSearch" />
 
-    <el-table :data="currentUsers" stripe highlight-current-row>
-      <el-table-column label="序号" prop="index" align="center" width="50px" />
+    <el-table :data="users" stripe highlight-current-row
+      v-loading.fullscreen="fullscreenLoading"
+      element-loading-text="正在操作"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+    >
+      <el-table-column label="序号" type="index" :index="updateIndex" align="center" width="70px" />
       <el-table-column label="用户名" prop="name" align="center" width="100px" />
-      <el-table-column label="邮箱" prop="email" align="center" width="200px" />
-      <el-table-column label="注册时间" prop="register_date" align="center" width="200px"/>
-      <el-table-column label="最后登录" prop="last_login_date" align="center" width="200px" />
+      <el-table-column label="昵称" prop="nickname" align="center" width="100px" />
+      <el-table-column label="ID" prop="id" align="center" />
+      <el-table-column label="邮箱" prop="email" align="center" />
       <el-table-column label="会员等级" prop="vip" align="center" width="100px" />
-      <el-table-column label="操作" align="center" width="200px">
+      <el-table-column label="操作" align="center">
         <template v-slot="scope">
           <el-button size="mini" type="primary"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -28,13 +33,19 @@
       :page-size="pageSize"
       background
       layout="total, sizes, prev, pager, next, jumper"
-      :total="filterUsers.length">
+      :total="all_result">
     </el-pagination>
 
-    <el-dialog title="编辑用户信息" :visible.sync="userFormVisible" width="500px">
+    <el-dialog title="编辑用户信息" :visible.sync="userFormVisible" width="450px">
       <el-form :model="userForm" label-width="80px">
+        <el-form-item label="用户名">
+          <el-input v-model="userForm.name" autocomplete="off" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="用户 ID">
+          <el-input v-model="userForm.id" autocomplete="off" disabled></el-input>
+        </el-form-item>
         <el-form-item label="昵称">
-          <el-input v-model="userForm.name" autocomplete="off" clearable></el-input>
+          <el-input v-model="userForm.nickname" autocomplete="off" clearable></el-input>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input v-model="userForm.email" autocomplete="off" clearable></el-input>
@@ -49,17 +60,16 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="handleEditUserCancel">取 消</el-button>
-        <el-button type="primary" @click="handleEditUserSuccess">确 定</el-button>
+        <el-button @click="userFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleConfirmOperation">修 改</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import axios from 'axios'
-import { resetIndex } from '@/utils/array.js'
+import { mapGetters } from 'vuex'
+import { getUsers, deleteUser, updateUser } from '@/api/user'
 import FilterCard from './FilterCard'
 
 export default {
@@ -70,12 +80,20 @@ export default {
   data () {
     return {
       users: [], // 原始数据
-      filterUsers: [], // 通过筛选后的数据
+      all_result: 0, // 符合筛选结果的数据总数
       currentPage: 1, // 当前显示的页码
       pageSize: 50, // 每页显示的条目数
-      userFormVisible: false,
-      userForm: {
+      filter: { // 用户数据筛选规则
+        vip: '',
+        search: '',
+        reverse: false
+      },
+      fullscreenLoading: false,
+      userFormVisible: false, // 控制修改用户信息的对话框
+      userForm: { // 修改用户信息时需要提交的表单数据
         name: '',
+        id: '',
+        nickname: '',
         email: '',
         tel: '',
         vip: ''
@@ -83,71 +101,93 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      showTips: state => state.settings.showTips
-    }),
-    currentUsers () { // 当前页码展示的条目
-      return resetIndex(this.filterUsers.slice(this.baseIndex, this.baseIndex + this.pageSize), this.baseIndex)
-    },
-    baseIndex () { // 当前页码的第一个编号
-      return (this.currentPage - 1) * this.pageSize
-    }
+    ...mapGetters(['showTips'])
   },
   mounted () {
-    axios.get('/api/users')
-      .then(res => {
-        this.users = resetIndex(res.data.list, 0)
-        this.filterUsers = this.users
-      })
-    console.log(this.showTips)
+    this.handleGetUsers()
   },
   methods: {
-    handleEdit (index, row) {
-      this.userFormVisible = true
-      this.userForm = Object.assign({}, row)
-      console.log(index, row)
+    handleGetUsers () {
+      this.fullscreenLoading = true
+      getUsers({
+        page: this.currentPage,
+        limit: this.pageSize,
+        vip: this.filter.vip,
+        search: this.filter.search,
+        reverse: this.filter.reverse
+      }).then(res => {
+        const data = res.data
+        this.fullscreenLoading = false
+        this.users = [].concat(data.items)
+        this.all_result = data.all_result
+      })
     },
+    // 删除用户成功后，重新请求数据
     handleDelete (index, row) {
-      console.log(index, row)
+      this.$confirm('此操作为敏感操作，请再次确认！', '警告', {
+        confirmButtonText: '确定操作',
+        cancelButtonText: '我再想想',
+        type: 'warning'
+      }).then(() => {
+        deleteUser(row.id).then(res => {
+          if (res.status === 200) {
+            this.handleGetUsers()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'error',
+          message: '删除失败！'
+        })
+      })
     },
+    // 页码、每页显示数、筛选搜索变化时都重新请求数据
     handleSizeChange (val) {
       this.pageSize = val
+      this.handleGetUsers()
     },
     handleCurrentChange (val) {
       this.currentPage = val
+      window.scrollTo({ x: 0, y: 0 })
+      this.handleGetUsers()
     },
     handleSearch (list) {
-      // todo: 设计一个 promise 搜索链，可以依次根据条件进行搜索
-      console.log(list.vip)
-      this.currentPage = 1 // 重置分页
-      if (!list.vip) {
-        this.filterUsers = this.users
-      } else {
-        const vipString = list.vip === 'normal' ? '大众会员' : (list.vip === 'high' ? '高级会员' : '超级会员')
-        this.filterUsers = resetIndex(this.users.filter(v => v.vip === vipString), this.baseIndex)
-      }
+      this.filter.vip = list.vip
+      this.filter.search = list.search
+      this.handleGetUsers()
     },
-    handleEditUserCancel () {
-      this.$confirm('可能有尚未提交的修改，是否退出？', '提示', {
-        confirmButtonText: '退出',
-        cancelButtonText: '我再看看',
-        type: 'warning'
-      }).then(() => {
-        this.userFormVisible = false
-      })
+    // 修改用户信息
+    handleEdit (index, row) {
+      this.userFormVisible = true
+      this.userForm = Object.assign({}, row)
     },
-    handleEditUserSuccess () {
-      this.$confirm('此操作为敏感操作，请再次确定提交信息！', '提示', {
+    handleConfirmOperation () {
+      this.$confirm('此操作为敏感操作，需要再次确定！', '警告', {
         confirmButtonText: '直接提交',
         cancelButtonText: '我再看看',
         type: 'warning'
       }).then(() => {
-        this.userFormVisible = false
-        this.$message({
-          type: 'success',
-          message: '修改成功!'
+        updateUser(this.userForm).then(res => {
+          if (res.status === 200) {
+            this.handleGetUsers()
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            })
+          }
         })
-      })
+        this.userFormVisible = false
+      }).catch(() => {})
+    },
+    updateIndex (index) {
+      return (this.currentPage - 1) * this.pageSize + index + 1
+    },
+    handleIndexReverse (e) {
+      console.log(e)
     }
   }
 }

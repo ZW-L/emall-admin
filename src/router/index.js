@@ -49,11 +49,6 @@ const constantRoutes = [
         name: 'UsersIndex'
       },
       {
-        path: 'detail',
-        component: () => import('@/views/users/detail'),
-        name: 'UsersDetail'
-      },
-      {
         path: 'add',
         component: () => import('@/views/users/add'),
         name: 'UsersAdd'
