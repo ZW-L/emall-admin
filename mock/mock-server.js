@@ -14,6 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded())
 
 for (const i of mocks) {
+  // GET 请求
   if (i.method === 'get') {
     app.get(i.url, (req, res) => {
       console.log(req.query)

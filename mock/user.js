@@ -125,6 +125,7 @@ module.exports = [
       }
 
       users.splice(index, 1)
+      count -= 1
       console.log('delete user: ', data.id)
 
       return {

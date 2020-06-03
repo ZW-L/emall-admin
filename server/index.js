@@ -20,7 +20,7 @@ app.use(session({
 }))
 
 // connect mongodb
-const conn = mongoose.connect('mongodb://localhost:27017/emall', {
+mongoose.connect('mongodb://localhost:27017/emall', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })

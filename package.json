@@ -7,8 +7,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "serve:node": "cd server && node index",
-    "serve:mock": "cd mock && node mock-server"
+    "server:node": "cd server && node index",
+    "server:mock": "cd mock && node mock-server"
   },
   "dependencies": {
     "axios": "^0.19.2",

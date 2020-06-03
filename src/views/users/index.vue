@@ -2,7 +2,7 @@
   <div class="table-wrapper">
     <el-alert v-if="showTips" type="info" effect="dark">提示：点击详情按钮可浏览用户详细信息。</el-alert>
     <filter-card @search="handleSearch" />
-
+    <!-- 用户列表 -->
     <el-table :data="users" stripe highlight-current-row
       v-loading.fullscreen="fullscreenLoading"
       element-loading-text="正在操作"
@@ -24,18 +24,15 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[20, 50, 100]"
-      :page-size="pageSize"
-      background
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="all_result">
-    </el-pagination>
-
+    <!-- 表格分页 -->
+    <table-pagination
+      @sizeChange="handleSizeChange"
+      @currentChange="handleCurrentChange"
+      :currentPage="currentPage"
+      :pageSize="pageSize"
+      :total="all_result"
+    />
+    <!-- 编辑信息对话框 -->
     <el-dialog title="编辑用户信息" :visible.sync="userFormVisible" width="450px">
       <el-form :model="userForm" label-width="80px">
         <el-form-item label="用户名">
@@ -71,12 +68,16 @@
 import { mapGetters } from 'vuex'
 import { getUsers, deleteUser, updateUser } from '@/api/user'
 import FilterCard from './FilterCard'
+import TablePagination from '@/components/TablePagination'
 
 export default {
   name: 'UsersView',
+
   components: {
-    FilterCard
+    FilterCard,
+    TablePagination
   },
+
   data () {
     return {
       users: [], // 原始数据
@@ -90,23 +91,20 @@ export default {
       },
       fullscreenLoading: false,
       userFormVisible: false, // 控制修改用户信息的对话框
-      userForm: { // 修改用户信息时需要提交的表单数据
-        name: '',
-        id: '',
-        nickname: '',
-        email: '',
-        tel: '',
-        vip: ''
-      }
+      userForm: '' // 修改用户信息时需要提交的表单数据
     }
   },
+
   computed: {
     ...mapGetters(['showTips'])
   },
+
   mounted () {
     this.handleGetUsers()
   },
+
   methods: {
+    // 获取数据：每次请求只获取一页数据
     handleGetUsers () {
       this.fullscreenLoading = true
       getUsers({
@@ -120,14 +118,17 @@ export default {
         this.fullscreenLoading = false
         this.users = [].concat(data.items)
         this.all_result = data.all_result
+      }).catch(err => {
+        console.log(err)
+        this.fullscreenLoading = false
       })
     },
     // 删除用户成功后，重新请求数据
     handleDelete (index, row) {
       this.$confirm('此操作为敏感操作，请再次确认！', '警告', {
-        confirmButtonText: '确定操作',
-        cancelButtonText: '我再想想',
-        type: 'warning'
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
       }).then(() => {
         deleteUser(row.id).then(res => {
           if (res.status === 200) {
@@ -152,7 +153,6 @@ export default {
     },
     handleCurrentChange (val) {
       this.currentPage = val
-      window.scrollTo({ x: 0, y: 0 })
       this.handleGetUsers()
     },
     handleSearch (list) {
@@ -165,6 +165,7 @@ export default {
       this.userFormVisible = true
       this.userForm = Object.assign({}, row)
     },
+    // 修改时显示提示框
     handleConfirmOperation () {
       this.$confirm('此操作为敏感操作，需要再次确定！', '警告', {
         confirmButtonText: '直接提交',
@@ -181,13 +182,12 @@ export default {
           }
         })
         this.userFormVisible = false
-      }).catch(() => {})
+      }).catch(() => {
+        this.userFormVisible = false
+      })
     },
     updateIndex (index) {
       return (this.currentPage - 1) * this.pageSize + index + 1
-    },
-    handleIndexReverse (e) {
-      console.log(e)
     }
   }
 }

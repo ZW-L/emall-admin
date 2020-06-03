@@ -1,29 +1,52 @@
-# admin
+# 使用
 
-## Project setup
+
+## 安装
+
 ```
-npm install
+git clone 
 ```
 
-### Compiles and hot-reloads for development
+## 启动
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+## 本地 mock 服务
+
 ```
-npm run build
+npm run server:mock
 ```
 
-### Run your unit tests
-```
-npm run test:unit
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+# 功能
+
+## 列表展示
+
++ 用户列表：增删改查
++ 商品列表：增删改查
++ 订单列表：增删改查
+
+
+
+## 图表分析
+
++ 营业额走势图
++ 自定义对比图
+
+
+
+## 数据服务
+
++ 本地 Mock 服务器
+  + mockjs 定制
++ 后台登录注册服务器
+  + express + mongodb
+  + jwt 鉴权
+
+
+
+# CHANGE_LOG

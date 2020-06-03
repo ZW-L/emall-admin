@@ -5,8 +5,7 @@
       <navbar class="main-navbar" />
       <app-main class="main-app" />
     </div>
-    <el-backtop target=".main-container">
-    </el-backtop>
+    <el-backtop id="backtop" target=".main-container" />
   </div>
 </template>
 
@@ -20,11 +19,6 @@ export default {
     Sidebar,
     AppMain,
     Navbar
-  },
-  data () {
-    return {
-
-    }
   },
   computed: {
     ...mapState({
