@@ -6,7 +6,6 @@ import users from './user'
 import products from './product'
 import orders from './order'
 
-// Mock.mock('/api/users', users)
 export function mockXHR () {
   Mock.XHR.prototype.proxy_send = Mock.XHR.prototype.send
   Mock.XHR.prototype.send = function () {

@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="main">
     <transition>
       <keep-alive>
         <router-view />
@@ -15,5 +15,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/variables';
 
+.main {
+  background-color: $mainBgc;
+}
 </style>
