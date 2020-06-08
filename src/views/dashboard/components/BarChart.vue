@@ -3,10 +3,13 @@
 </template>
 
 <script>
+import resize from './mixins/resize'
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 
 export default {
+  mixins: [resize],
+
   props: {
     width: {
       type: String,
@@ -22,13 +25,8 @@ export default {
     return {
       chart: null,
       option: {
-        title: {
-          text: '品类销量'
-        },
         tooltip: {},
-        legend: {
-          data: ['']
-        },
+        legend: {},
         xAxis: {
           data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
         },
@@ -37,6 +35,10 @@ export default {
           name: '销量',
           type: 'bar',
           data: [5, 20, 36, 10, 10, 20]
+        }, {
+          name: '库存',
+          type: 'bar',
+          data: [45, 30, 14, 40, 40, 30]
         }]
       }
     }

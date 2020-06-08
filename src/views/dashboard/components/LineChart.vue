@@ -3,10 +3,13 @@
 </template>
 
 <script>
+import resize from './mixins/resize'
 import echarts from 'echarts'
 require('echarts/theme/macarons')
 
 export default {
+  mixins: [resize],
+
   props: {
     width: {
       type: String,
@@ -14,7 +17,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '350px'
     }
   },
 

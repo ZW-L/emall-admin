@@ -1,6 +1,6 @@
 <template>
   <div>
-    <icon-button class="pull-left" @toggleClick="handleToggleSidebar" />
+    <icon-button class="pull-left" @toggleClick="toggleSidebar" />
     <el-breadcrumb
       class="nav-main pull-left"
       separator-class="el-icon-arrow-right"
@@ -25,8 +25,8 @@ export default {
     NavUser
   },
   methods: {
-    handleToggleSidebar () {
-      this.$store.dispatch('settings/toggleSidebar')
+    toggleSidebar () {
+      this.$store.dispatch('app/toggleSidebar')
     }
   }
 }

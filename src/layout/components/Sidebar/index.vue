@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div :class="{ 'collapse': isCollapse }">
     <logo title="Emall Admin"></logo>
     <el-menu
       mode="vertical"
@@ -73,9 +73,13 @@
 
 <script>
 import Logo from './logo'
+import { mapState } from 'vuex'
 
 export default {
   name: 'sidebar',
+  components: {
+    Logo
+  },
   data () {
     return {
       activeId: 1,
@@ -144,15 +148,15 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      opened: state => state.app.sidebar.opened
+    }),
     isCollapse () {
-      return this.$store.state.settings.sidebarCollapse
+      return !this.opened
     }
   },
-  components: {
-    Logo
-  },
   methods: {
-    handleNodeCLick (data) {
+    handleNodeClick (data) {
       console.log(data)
       if (!data.path || data.path === this.$route.path) {
         return

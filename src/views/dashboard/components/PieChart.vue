@@ -3,10 +3,13 @@
 </template>
 
 <script>
+import resize from './mixins/resize'
 import echarts from 'echarts'
 require('echarts/theme/macarons')
 
 export default {
+  mixins: [resize],
+
   props: {
     width: {
       type: String,
@@ -27,7 +30,10 @@ export default {
         },
         legend: {
           left: 'center',
-          bottom: '10',
+          bottom: 10,
+          textStyle: {
+            fontSize: 10
+          },
           data: ['视频广告', '邮件营销', '直接访问', '搜索引擎']
         },
         series: [{
@@ -35,6 +41,7 @@ export default {
           type: 'pie',
           roseType: 'angle',
           radius: '55%',
+          bottom: 10,
           data: [
             { value: 835, name: '视频广告' },
             { value: 710, name: '邮件营销' },

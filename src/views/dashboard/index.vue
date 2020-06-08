@@ -12,20 +12,20 @@
 
     <!-- other chart -->
     <el-row class="other-chart" :gutter="20">
-      <el-col :span="8">
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <bar-chart class="other-chart-item" />
       </el-col>
-      <el-col :span="8">
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <pie-chart class="other-chart-item" />
       </el-col>
-      <el-col :span="8">
+      <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8">
         <radar-chart class="other-chart-item" />
       </el-col>
     </el-row>
 
     <!-- info-group -->
     <el-row class="info-group" :gutter="10">
-      <el-col :span="12">
+      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-table
           class="info-group-item info-group-item-order"
           :data="orders"
@@ -47,10 +47,10 @@
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
         <div class="info-group-item"></div>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
         <div class="info-group-item"></div>
       </el-col>
     </el-row>
@@ -111,24 +111,25 @@ export default {
 .dashboard {
   padding: 30px 20px;
   .line-chart {
-    height: 300px;
+    height: 350px;
+    margin-bottom: 30px;
     background-color: #fff;
   }
+
   .other-chart {
     &-item {
       height: 300px;
+      margin-bottom: 30px;
       background-color: #fff;
     }
   }
+
   .info-group {
     &-item {
       min-height: 300px;
+      margin-bottom: 30px;
       background-color: #fff;
     }
   }
-}
-
-.el-row {
-  margin-bottom: 30px;
 }
 </style>

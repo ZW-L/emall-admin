@@ -4,3 +4,8 @@
 @import './element-ui.scss';
 @import './layout.scss';
 @import './transition.scss';
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
