@@ -19,8 +19,8 @@
           <span slot="title">用户</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="2-1" route="/users">所有用户</el-menu-item>
-          <el-menu-item index="2-2" route="/users/add">添加用户</el-menu-item>
+          <el-menu-item index="2-1" route="/customer">所有用户</el-menu-item>
+          <el-menu-item index="2-2" route="/customer/add">添加用户</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
 
@@ -88,8 +88,8 @@ export default {
         {
           label: '用户管理',
           children: [
-            { label: '所有用户', path: '/users' },
-            { label: '添加用户', path: '/users/add' }
+            { label: '所有用户', path: '/customer' },
+            { label: '添加用户', path: '/customer/add' }
           ]
         },
         {

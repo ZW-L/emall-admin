@@ -1,12 +1,14 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const users = require('./user')
+const customer = require('./customer')
 const products = require('./product')
-const orders = require('./order')
+const user = require('./user')
+// const orders = require('./order')
 const mocks = [
-  ...users,
-  ...products
+  ...customer,
+  ...products,
+  ...user
 ]
 
 const app = express()
@@ -24,6 +26,7 @@ for (const i of mocks) {
     })
   } else {
     app.use(i.url, (req, res) => {
+      console.log('post request...')
       setTimeout(() => {
         res.json(i.response(req.body))
       }, 500)

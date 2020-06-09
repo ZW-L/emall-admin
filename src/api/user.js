@@ -1,31 +1,24 @@
 import request from '@/utils/request'
 
-export const getUsers = ({ page, limit, vip, search, reverse }) => request({
-  url: '/mock/emall/user/list',
-  method: 'get',
-  params: { page, limit, vip, search, reverse }
-})
+export function login (data) {
+  return request({
+    url: '/mock/emall/user/login',
+    method: 'post',
+    data
+  })
+}
 
-export const getUserDetail = (id) => request({
-  url: '/mock/emall/user/detail',
-  method: 'get',
-  params: { id }
-})
+export function logout () {
+  return request({
+    url: '/mock/emall/user/logout',
+    method: 'post'
+  })
+}
 
-export const addUser = (user) => request({
-  url: '/mock/emall/user/add',
-  method: 'post',
-  data: { user }
-})
-
-export const updateUser = (user) => request({
-  url: '/mock/emall/user/update',
-  method: 'post',
-  data: { user }
-})
-
-export const deleteUser = (id) => request({
-  url: '/mock/emall/user/delete',
-  method: 'delete',
-  data: { id }
-})
+export function getUserInfo (token) {
+  return request({
+    url: '/mock/emall/user/info',
+    method: 'get',
+    params: { token }
+  })
+}

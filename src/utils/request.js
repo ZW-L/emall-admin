@@ -14,7 +14,7 @@ service.interceptors.request.use(
   config => {
     // 保证所有请求发出前都携带 token
     if (store.getters.token) {
-      config['X-Token'] = getToken()
+      config.headers['X-Token'] = getToken()
     }
     return config
   },

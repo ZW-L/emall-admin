@@ -39,19 +39,19 @@ const constantRoutes = [
     ]
   },
   {
-    path: '/users',
+    path: '/customer',
     component: Layout,
-    redirect: '/users',
+    redirect: '/customer',
     children: [
       {
         path: '',
-        component: () => import('@/views/users/index'),
-        name: 'UsersIndex'
+        component: () => import('@/views/customer/index'),
+        name: 'Customer'
       },
       {
         path: 'add',
-        component: () => import('@/views/users/add'),
-        name: 'UsersAdd'
+        component: () => import('@/views/customer/add'),
+        name: 'CustomerAdd'
       }
     ]
   },
