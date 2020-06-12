@@ -1,26 +1,22 @@
 // sidebar
 .sidebar-container {
+  .el-menu-item {
+    background-color: transparent !important;
+    &:hover {
+      background-color: #1f2d3d !important;
+    }
+  }
   .el-menu {
     border: none;
   }
-  // 图标样式
-  .el-menu, .el-submenu {
-    i {
-      color: #fff;
-      margin-right: 10px;
-    }
-  }
-  .el-menu-item-group {
-    // 删除上方空隙
-    &__title {
-      display: none;
-    }
-    // 为子列表添加背景色和交互颜色
-    .el-menu-item {
+  .el-submenu.is-opened {
+    .el-menu,
+    .el-submenu > .el-submenu__title {
       background-color: #1f2d3d !important;
-      &:hover {
-        background: #011428 !important;
-      }
+    }
+    .el-menu-item:hover,
+    .el-submenu__title:hover {
+      background-color: #001528 !important;
     }
   }
 }

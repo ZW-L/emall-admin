@@ -58,8 +58,8 @@ module.exports = [
   {
     url: '/emall/user/info',
     method: 'get',
-    response: config => {
-      const { token } = config.query
+    response: query => {
+      const { token } = query
       const info = users[token]
 
       if (!info) {

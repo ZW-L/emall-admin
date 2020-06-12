@@ -1,6 +1,6 @@
 import { login, logout, getUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import router from '@/router'
+import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
@@ -71,7 +71,7 @@ const actions = {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
-        // resetRouter()
+        resetRouter()
         router.push('/login')
 
         // dispatch('tagsView/delAllViews', null, { root: true })
@@ -100,7 +100,7 @@ const actions = {
       setToken(token)
 
       const { roles } = await dispatch('getInfo')
-      // resetRouter()
+      resetRouter()
 
       const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
       router.addRoutes(accessRoutes)

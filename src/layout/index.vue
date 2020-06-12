@@ -4,6 +4,7 @@
     <sidebar class="sidebar-container" />
     <div class="main-container">
       <navbar class="main-navbar" />
+      <tags-view />
       <app-main class="main-app" />
     </div>
     <el-backtop id="backtop" target=".main-container" />
@@ -13,7 +14,7 @@
 <script>
 import resize from './mixins/resize'
 import { mapState } from 'vuex'
-import { Sidebar, AppMain, Navbar } from './components'
+import { Sidebar, AppMain, Navbar, TagsView } from './components'
 
 export default {
   name: 'Layout',
@@ -21,7 +22,8 @@ export default {
   components: {
     Sidebar,
     AppMain,
-    Navbar
+    Navbar,
+    TagsView
   },
   computed: {
     ...mapState({

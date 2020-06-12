@@ -27,18 +27,21 @@ export default {
 
 <style lang="scss" scoped>
 .dropdown {
+
   .el-dropdown-link:hover {
     cursor: pointer;
   }
+
   &-avatar-wrapper {
     box-sizing: border-box;
     display: inline-block;
-    width: 40px;
-    height: 50px;
-    padding-top: 5px;
+    width: 34px;
+    height: 34px;
+    margin-top: 3px;
+
     img {
       width: 100%;
-      border-radius: 5px;
+      border-radius: 50%;
     }
   }
 }

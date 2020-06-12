@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <icon-button class="pull-left" @toggleClick="toggleSidebar" />
+  <div class="navbar">
+    <svg-icon :icon-class="iconClass" class="toggle-sidebar" @click="toggleSidebar"></svg-icon>
+
     <el-breadcrumb
-      class="nav-main pull-left"
+      class="navbar-main"
       separator-class="el-icon-arrow-right"
     >
       <el-breadcrumb-item to="/">首页</el-breadcrumb-item>
@@ -10,19 +11,25 @@
       <el-breadcrumb-item>活动列表</el-breadcrumb-item>
       <el-breadcrumb-item>活动详情</el-breadcrumb-item>
     </el-breadcrumb>
-    <nav-user class="nav-user" />
+
+    <nav-user class="navbar-user" />
   </div>
 </template>
 
 <script>
-import IconButton from '@/components/IconButton'
-import NavUser from '@/components/NavUser'
+import NavUser from './components/NavUser.vue'
+import SvgIcon from '@/components/SvgIcon'
 
 export default {
   name: 'Navbar',
   components: {
-    IconButton,
-    NavUser
+    NavUser,
+    SvgIcon
+  },
+  computed: {
+    iconClass () {
+      return this.$store.getters.sidebar.opened ? 'collapse' : 'show'
+    }
   },
   methods: {
     toggleSidebar () {
@@ -33,15 +40,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.pull-left {
-  float: left;
-}
-.nav-main {
-  height: 50px;
-  line-height: 50px;
-}
-.nav-user {
-  float: right;
-  margin-right: 30px;
+@import '@/styles/variables.scss';
+
+.navbar {
+  display: flex;
+  font-size: 14px;
+
+  .toggle-sidebar {
+    width: 40px;
+    text-align: center;
+    line-height: $navBarHeight;
+    cursor: pointer;
+  }
+
+  &-main {
+    flex: 1;
+    font-size: 12px;
+    line-height: $navBarHeight;
+  }
+
+  &-user {
+    width: 80px;
+  }
 }
 </style>
